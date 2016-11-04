@@ -46,9 +46,9 @@ On the Facebook for Developers site:
 After you have configured the Facebook Application ID and your Facebook Application to serve iOS clients, you can enable Facebook authentication in {{site.data.keyword.amashort}}.
 
 1. Open your service in the  {{site.data.keyword.amashort}} dashboard.
-1. From the **Manage** tab, pull the **Authorization** lever to the **On** position.
-1. Expand the **Facebook** section.
-1. Add the **Facebook Application ID** and click **Save**.
+1. From the **Manage** tab, toggle **Authorization** on.
+	1. Expand the **Facebook** section.
+	1. Add the **Facebook Application ID** and click **Save**.
 
 ## Configuring the {{site.data.keyword.amashort}} Facebook client SDK for iOS
 {: #facebook-auth-ios-sdk}
@@ -88,58 +88,59 @@ The {{site.data.keyword.amashort}} client SDK is distributed with CocoaPods, a d
 
 You can also update the `info.plist` file by right-clicking the file, selecting **Open as > Source Code** and adding the following XML:
 
- ```XML
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>fb{your-facebook-application-id}</string>
-			</array>
-		</dict>
-	</array>
-	<key>FacebookAppID</key>
-	<string>{your-facebook-application-id}</string>
-	<key>FacebookDisplayName</key>
-	<string>MyApp</string>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>fbauth</string>
-		<string>fbauth2</string>
-	</array>
-	<key>NSAppTransportSecurity</key>
+```XML
+<key>CFBundleURLTypes</key>
+<array>
 	<dict>
-	    <key>NSExceptionDomains</key>
-	    <dict>
-	        <key>facebook.com</key>
-	        <dict>
-	            <key>NSIncludesSubdomains</key>
-	            <true/>                
-	            <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
-	            <false/>
-	        </dict>
-	        <key>fbcdn.net</key>
-	        <dict>
-	            <key>NSIncludesSubdomains</key>
-	            <true/>
-	            <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
-	            <false/>
-	        </dict>
-	        <key>akamaihd.net</key>
-	        <dict>
-	            <key>NSIncludesSubdomains</key>
-	            <true/>
-	            <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
-	            <false/>
-	        </dict>
-	    </dict>
+		<key>CFBundleURLSchemes</key>
+		<array>
+			<string>fb{your-facebook-application-id}</string>
+		</array>
 	</dict>
+</array>
+<key>FacebookAppID</key>
+<string>{your-facebook-application-id}</string>
+<key>FacebookDisplayName</key>
+<string>MyApp</string>
+<key>LSApplicationQueriesSchemes</key>
+<array>
+	<string>fbauth</string>
+	<string>fbauth2</string>
+</array>
+<key>NSAppTransportSecurity</key>
+<dict>
+    <key>NSExceptionDomains</key>
+    <dict>
+        <key>facebook.com</key>
+        <dict>
+            <key>NSIncludesSubdomains</key>
+            <true/>
+            <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+            <false/>
+        </dict>
+        <key>fbcdn.net</key>
+        <dict>
+            <key>NSIncludesSubdomains</key>
+            <true/>
+            <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+            <false/>
+        </dict>
+        <key>akamaihd.net</key>
+        <dict>
+            <key>NSIncludesSubdomains</key>
+            <true/>
+            <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+            <false/>
+        </dict>
+    </dict>
+</dict>
 ```
 {: codeblock}
 
 Update the URL scheme and `FacebookappID` properties with your **Facebook Application ID**.
 
  **Important**: Make sure you are not overriding any existing properties in  the `info.plist` file. If you have overlapping properties, you must merge manually. For more information, see [Configure Xcode Project](https://developers.facebook.com/docs/ios/getting-started/) and [Preparing Your Apps for iOS9](https://developers.facebook.com/docs/ios/ios9).
+
 
 ## Initializing the {{site.data.keyword.amashort}} client SDK
 {: #facebook-auth-ios-initalize}
@@ -166,38 +167,38 @@ A common, though not mandatory, place to put the initialization code is in the `
 	The {{site.data.keyword.amashort}} client SDK is implemented using Objective-C, therefore you might need to add a bridging header to your swift project.
 
 	1. Right-click your project in Xcode and select **New File...**
-	* In the **iOS Source** category, pick `Header file`.
-	* Name it `BridgingHeader.h`.
-	* Add imports to your bridging header:
+		1. In the **iOS Source** category, pick `Header file`.
+		1. Name it `BridgingHeader.h`.
+		1. Add imports to your bridging header:
 
-	```Objective-C
-	#import <IMFCore/IMFCore.h>
-	#import <IMFFacebookAuthentication/IMFFacebookAuthenticationHandler.h>
-	#import <FacebookSDK/FacebookSDK.h>
-	```
+			```Objective-C
+			#import <IMFCore/IMFCore.h>
+			#import <IMFFacebookAuthentication/IMFFacebookAuthenticationHandler.h>
+			#import <FacebookSDK/FacebookSDK.h>
+			```
 
-	1. Click your project in Xcode and select **Build Settings** tab.
-	* Search for **Objective-C Bridging Header**.
-	* Set the value to location of your `BridgingHeader.h` file, for example: `$(SRCROOT)/MyApp/BridgingHeader.h`.
-	* Make sure your bridging header is being picked up by Xcode by building your project. You should see no failure messages.
+	1. Click your project in Xcode and select the **Build Settings** tab.
+		1. Search for **Objective-C Bridging Header**.
+		1. Set the value to location of your `BridgingHeader.h` file, for example: `$(SRCROOT)/MyApp/BridgingHeader.h`.
+		1. Make sure your bridging header is being picked up by Xcode by building your project. You should see no failure messages.
 
-3. Initialize the client SDK.	For information on obtaining `applicationRoute` and `applicationGUID`  see [Before you begin](#before-you-begin)).
+2. Initialize the client SDK.	For information on obtaining `applicationRoute` and `applicationGUID`  see [Before you begin](#before-you-begin)).
 
-####Objective-C
+	####Objective-C
 	{: #approute-objc}
 
 	```Objective-C
 	[[IMFClient sharedInstance]
-			initializeWithBackendRoute:@"applicationRoute"
+				initializeWithBackendRoute:@"applicationRoute"
 			backendGUID:@"applicationGUID"];
 	```
 
-####Swift
+	####Swift
 	{: #approute-swift}
 
 	```Swift
 	IMFClient.sharedInstance().initializeWithBackendRoute("applicationRoute",
-	 							backendGUID: "applicationGUID")
+                               backendGUID: "applicationGUID")
 	```
 
 1. Initialize the `AuthorizationManager` by passing the {{site.data.keyword.amashort}} service `tenantId` parameter. See [Before you begin].
@@ -259,6 +260,7 @@ A common, though not mandatory, place to put the initialization code is in the `
 
 	}
 ```
+
 
 ## Testing the authentication
 {: #facebook-auth-ios-testing}
